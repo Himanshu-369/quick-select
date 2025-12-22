@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "AI AnyWhere Selector",
+  "version": "5.0",
+  "permissions": ["storage", "activeTab", "menus", "contextMenus", "scripting", "downloads"],
+  "host_permissions": [
+    "<all_urls>", 
+    "http://localhost/*", 
+    "http://127.0.0.1/*"
+  ],
+  "background": { "scripts": ["background.js"] },
+  "action": { "default_popup": "options.html" },
+  "commands": {
+    "toggle_selection_mode": {
+      "suggested_key": {
+        "default": "Alt+W",
+        "mac": "MacCtrl+Shift+S"
+      },
+      "description": "Toggle Selection Mode"
+    },
+    "toggle_global_state": {
+      "suggested_key": {
+        "default": "Alt+Shift+X",
+        "mac": "MacCtrl+Shift+X"
+      },
+      "description": "Enable/Disable Extension Globally"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ]
+}

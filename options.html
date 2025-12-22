@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    :root { 
+      --bg: #ffffff; --surface: #f7f9fc; --text-main: #1a1a1a; --text-sub: #666666;
+      --primary: #2563eb; --primary-hover: #1d4ed8; --border: #e5e7eb;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    body.dark-mode { 
+      --bg: #111111; --surface: #1c1c1c; --text-main: #ededed; --text-sub: #a1a1a1;
+      --primary: #3b82f6; --primary-hover: #60a5fa; --border: #333333;
+    }
+    
+    body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text-main); width: 380px; margin: 0; padding: 24px; }
+    
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    h2 { margin: 0; font-size: 20px; font-weight: 700; }
+    
+    /* --- Modern Theme Toggle --- */
+    #themeToggle { 
+      cursor: pointer; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      width: 36px; 
+      height: 36px; 
+      border-radius: 50%; 
+      background: var(--surface); 
+      border: 1px solid var(--border); 
+      color: var(--text-main);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #themeToggle:hover { 
+      background: var(--border); 
+      transform: rotate(15deg) scale(1.05); 
+    }
+    /* Updated SVG Styles for Filled Icons */
+    #themeToggle svg { 
+      width: 20px; 
+      height: 20px; 
+      fill: currentColor; /* Uses text color */
+      stroke: none;       /* Removes outline */
+      transition: transform 0.3s ease;
+    }
+    #themeToggle:active svg { transform: scale(0.9); }
+
+    .field { margin-bottom: 18px; }
+    label { display: block; font-size: 11px; color: var(--text-sub); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; }
+    
+    select, input, textarea { 
+      width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 10px; 
+      background: var(--surface); color: var(--text-main); box-sizing: border-box; outline: none; font-size: 14px;
+    }
+    select:focus, input:focus, textarea:focus { border-color: var(--primary); }
+
+    button { 
+      width: 100%; padding: 12px; border-radius: 10px; border: none; cursor: pointer; 
+      font-weight: 600; font-size: 13px; margin-top: 10px; transition: 0.2s;
+    }
+    #saveBtn { background: var(--primary); color: #fff; }
+    #fetchModelsBtn { background: var(--surface); border: 1px solid var(--border); color: var(--text-main); margin-top: 5px; font-size: 12px; }
+    #fetchModelsBtn:hover { background: var(--border); }
+
+    .checkbox-wrapper { display: flex; align-items: center; cursor: pointer; }
+    .checkbox-wrapper input { width: 16px; height: 16px; margin-right: 10px; accent-color: var(--primary); }
+    
+    .row { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; }
+    .secondary-btn { background: transparent; border: 1px dashed var(--border); color: var(--text-sub); }
+    
+    .hidden { display: none; }
+    .status-msg { font-size: 11px; margin-top: 4px; min-height: 14px; }
+    .success { color: #10b981; } .error { color: #ef4444; }
+
+    .master-switch { 
+        background: var(--surface); border: 1px solid var(--border); 
+        padding: 12px; border-radius: 10px; margin-bottom: 20px;
+        display: flex; align-items: center; justify-content: space-between;
+    }
+    .master-switch label { margin: 0; font-size: 13px; font-weight: 600; text-transform: none; color: var(--text-main); }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h2>AI Selector</h2>
+    <div id="themeToggle" title="Toggle Theme"></div>
+  </div>
+
+  <div class="master-switch">
+    <label>Enable Extension</label>
+    <div class="checkbox-wrapper">
+      <input type="checkbox" id="extensionEnabled">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Provider</label>
+    <select id="providerSelect">
+      <option value="google">Google Gemini</option>
+      <option value="groq">Groq</option>
+      <option value="openrouter">OpenRouter</option>
+      <option value="ollama">Ollama (Local)</option>
+    </select>
+  </div>
+
+  <div class="field" id="apiKeyField">
+    <label id="apiKeyLabel">API Key</label>
+    <input type="password" id="apiKey" placeholder="Enter API Key...">
+  </div>
+
+  <div class="field" id="ollamaHostField" class="hidden">
+    <label>Ollama Host URL</label>
+    <input type="text" id="ollamaHost" value="http://localhost:11434">
+  </div>
+  
+  <div class="field">
+    <label>Model</label>
+    <select id="modelSelect">
+      <!-- Populated Dynamically -->
+    </select>
+    <button id="fetchModelsBtn">↻ Fetch Available Models</button>
+    <div id="fetchStatus" class="status-msg"></div>
+  </div>
+
+  <div id="googleSettings" class="hidden">
+    <div class="field"><label class="checkbox-wrapper"><input type="checkbox" id="useSearch"> <span>Enable Google Search</span></label></div>
+  </div>
+
+  <div class="field">
+    <label class="checkbox-wrapper"><input type="checkbox" id="confirmTrigger"> <span>Confirm Selection Triggers</span></label>
+  </div>
+
+  <div class="field">
+    <label>System Instructions</label>
+    <textarea id="systemPrompt" placeholder="You are a helpful assistant."></textarea>
+  </div>
+
+  <button id="saveBtn">Save Settings</button>
+  
+  <div class="row">
+    <button id="exportBtn" class="secondary-btn">Export</button>
+    <button id="importBtn" class="secondary-btn">Import</button>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
