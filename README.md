@@ -1,8 +1,3 @@
-Here is a complete, professional GitHub README for your Chrome extension. It highlights the unique features (like the "hydrophobic" popup and easy selection mode) and provides clear instructions for setup and usage.
-
-***
-
-```markdown
 # 🌐 AI AnyWhere Selector
 
 **Select text and ask AI anywhere on the web.**
@@ -122,4 +117,3 @@ Perfect for grabbing large blocks of text without clicking and dragging.
 ## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-```
