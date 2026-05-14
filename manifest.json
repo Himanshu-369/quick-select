@@ -1,15 +1,28 @@
 {
   "manifest_version": 3,
   "name": "AI AnyWhere Selector",
-  "version": "5.0",
-  "permissions": ["storage", "activeTab", "menus", "contextMenus", "scripting", "downloads"],
+  "version": "5.2",
+  "description": "Select text and ask AI anywhere.",
+  "permissions": ["storage", "activeTab", "contextMenus", "scripting", "downloads"],
   "host_permissions": [
-    "<all_urls>", 
-    "http://localhost/*", 
+    "<all_urls>",
+    "http://localhost/*",
     "http://127.0.0.1/*"
   ],
-  "background": { "scripts": ["background.js"] },
-  "action": { "default_popup": "options.html" },
+  "background": { "service_worker": "background.js" },
+  "action": { 
+    "default_popup": "options.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "commands": {
     "toggle_selection_mode": {
       "suggested_key": {
