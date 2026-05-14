@@ -99,5 +99,3 @@ Since this is a developer tool, load it as an unpacked extension:
 This project is licensed under the MIT License - see the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
 
 ---
-
-**Is there a specific section you'd like to emphasize even more, or does this cover the full feature set now?**
