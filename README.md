@@ -1,6 +1,4 @@
----
-
-#  AI AnyWhere Selector
+# 🌐 AI AnyWhere Selector
 
 **Select text and ask AI anywhere on the web.**
 
